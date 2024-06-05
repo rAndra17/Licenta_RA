@@ -28,8 +28,8 @@ bool onPowerState(const String &deviceId, bool &state) {
   Serial.printf("Device turned %s\n", state?"on":"off");
   on_off_data[2] = state ? 0x01 : 0x00;
   //disconnect from wifi and turn off the wifi radio
-  WiFi.disconnect(true);
-  delay(1000);
+  disconnectWiFi();
+
   //initialize bt
   NimBLEDevice::init("");
   NimBLEDevice::setPower(ESP_PWR_LVL_P9);
@@ -56,15 +56,7 @@ bool onPowerState(const String &deviceId, bool &state) {
   }
 
   //disconect bt
-  pClient->disconnect();
-  delay(1000);
-
-  NimBLEDevice::deleteClient(pClient); // Delete the client object
-  NimBLEDevice::deinit(); // Deinitialize NimBLE
-  pClient = nullptr; // Reset the pointer
-  pService = nullptr;
-  pCharacteristic = nullptr;
-
+  disconnectBLE();
   reconnectWiFi();
   return true; // request handled properly
 }
@@ -73,11 +65,10 @@ bool onColor(const String &deviceId, byte &r, byte &g, byte &b) {
   rgb_color_data[2] = r;
   rgb_color_data[3] = g;
   rgb_color_data[4] = b;
-  Serial.printf("Device %s color changed to %d, %d, %d (RGB)\r\n", deviceId.c_str(), rgb_color_data[2], rgb_color_data[3], rgb_color_data[4]);
+  Serial.printf("Device color changed to %d, %d, %d (RGB)\r\n", rgb_color_data[2], rgb_color_data[3], rgb_color_data[4]);
 
   //disconnect from wifi and turn off the wifi radio
-  WiFi.disconnect(true);
-  delay(1000);
+  disconnectWiFi();
   //initialize bt
   NimBLEDevice::init("");
   NimBLEDevice::setPower(ESP_PWR_LVL_P9);
@@ -104,15 +95,7 @@ bool onColor(const String &deviceId, byte &r, byte &g, byte &b) {
   }
 
   //disconect bt
-  pClient->disconnect();
-  delay(1000);
-
-  NimBLEDevice::deleteClient(pClient); // Delete the client object
-  NimBLEDevice::deinit(); // Deinitialize NimBLE
-  pClient = nullptr; // Reset the pointer
-  pService = nullptr;
-  pCharacteristic = nullptr;
-
+  disconnectBLE();
   reconnectWiFi();
   return true;
 }
@@ -145,7 +128,25 @@ void reconnectWiFi() {
   }
   
   Serial.printf("");
-  Serial.printf("\n WiFi reconnected");
+  Serial.printf("\n WiFi reconnected\n");
+}
+
+void disconnectWiFi() {
+    WiFi.disconnect(true);
+    delay(500);
+    Serial.printf("WiFi disconnected");
+}
+
+void disconnectBLE() {
+  pClient->disconnect();
+  delay(500);
+
+  NimBLEDevice::deleteClient(pClient); // Delete the client object
+  NimBLEDevice::deinit(); // Deinitialize NimBLE
+  pClient = nullptr; // Reset the pointer
+  pService = nullptr;
+  pCharacteristic = nullptr;
+  Serial.println("BLE disconnected and resources freed");
 }
 
 // setup function for SinricPro
