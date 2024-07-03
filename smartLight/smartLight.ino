@@ -1,18 +1,16 @@
 #include <Arduino.h>
 #include <WiFi.h>
-
 #include "SinricPro.h"
 #include "SinricProLight.h"
 #include <NimBLEDevice.h>
-#include <vector>
 
-#define WIFI_SSID         "5Ghz"  // Change WIFI_SSID to your WiFi Name.
-#define WIFI_PASS         "chucknorris45"  // Change WIFI_PASS to your WiFi password.
-#define APP_KEY           "849de8ef-55fe-4aaa-9df3-a671eb2927a5"  // Paste App Key from above 
-#define APP_SECRET        "ab60ea94-9aab-4711-89ce-f77f0126efe8-c5fe95c8-6293-478b-867a-4254444258aa"  // Paste App Secret from above 
-#define LIGHT_ID          "6648ec36fb874c7486d5473a"  // Paste Device Id from  above
+#define WIFI_SSID       "Nume"    // numele retelei 
+#define WIFI_PASS       "Parola"  // parola de acces
+#define APP_KEY         "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"  // App Key 
+#define APP_SECRET      "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx-xxx..."  // App Secret  
+#define LIGHT_ID        "Id_dizpozitiv"  // Device Id 
 
-static NimBLEAddress serverAddress ("74:d2:85:5e:40:34");
+static NimBLEAddress serverAddress ("74:d2:85:5e:40:34"); //adresa MAC a ghirlandei
 static NimBLEUUID serviceUUID("1000");
 static NimBLEUUID characteristicUUID("1001");
 
